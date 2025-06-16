@@ -32,9 +32,9 @@ export async function GET(req: NextRequest) {
 
         const tokenData = await tokenResponse.json();
         console.log(tokenData);
-        if (!tokenData || !tokenData.access_token) return Response.redirect(new URL(`/login/error?e=access_token`, req.url));
+        if (!tokenData || !tokenData?.authed_user || !tokenData?.authed_user?.access_token) return Response.redirect(new URL(`/login/error?e=access_token`, req.url));
 
-        const { access_token } = tokenData as { access_token: string };
+        const access_token = tokenData?.authed_user?.access_token as string;
 
         const userRes = await fetch("https://slack.com/api/users.identity", {
             headers: {
