@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
     const searchParams = req.nextUrl.searchParams;
     const code = searchParams.get("code");
 
-    if (!code) return Response.redirect("/login/error?e=code");
+    if (!code) return Response.redirect(new URL("/login/error?e=code", req.url));
 
     try {
         const tokenParams = new URLSearchParams({
@@ -27,11 +27,11 @@ export async function GET(req: NextRequest) {
 
         if (!tokenResponse.ok) {
             console.log(tokenResponse);
-            return Response.redirect(`/login/error?e=2`);
+            return Response.redirect(new URL(`/login/error?e=2`, req.url));
         }
 
         const tokenData = await tokenResponse.json();
-        if (!tokenData || !tokenData.access_token) return Response.redirect(`/login/error?e=access_token`);
+        if (!tokenData || !tokenData.access_token) return Response.redirect(new URL(`/login/error?e=access_token`, req.url));
 
         const { access_token } = tokenData as { access_token: string };
 
@@ -43,13 +43,13 @@ export async function GET(req: NextRequest) {
 
         if (!userRes.ok) {
             console.log(userRes);
-            return Response.redirect(`/login/error?e=user_identity`);
+            return Response.redirect(new URL(`/login/error?e=user_identity`, req.url));
         }
 
         const userData = await userRes.json();
         const user = userData?.user;
 
-        if (!user || !user.email || !user.id) return Response.redirect(`/login/error?e=user`);
+        if (!user || !user.email || !user.id) return Response.redirect(new URL(`/login/error?e=user`, req.url));
 
         const { id, email, name, image_192 } = user as { id: string, email: string, name: string | undefined, image_192: string | undefined };
 
@@ -103,10 +103,10 @@ export async function GET(req: NextRequest) {
                 .catch((error) => console.error(error));
         }
 
-        return Response.redirect("/");
+        return Response.redirect(new URL("/", req.url));
     }
     catch (error) {
         console.error(error);
-        return Response.redirect("/login/error?e=log")
+        return Response.redirect(new URL("/login/error?e=log", req.url));
     }
 }
