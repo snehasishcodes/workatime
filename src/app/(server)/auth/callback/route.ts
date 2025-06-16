@@ -31,6 +31,7 @@ export async function GET(req: NextRequest) {
         }
 
         const tokenData = await tokenResponse.json();
+        console.log(tokenData);
         if (!tokenData || !tokenData.access_token) return Response.redirect(new URL(`/login/error?e=access_token`, req.url));
 
         const { access_token } = tokenData as { access_token: string };
@@ -47,6 +48,7 @@ export async function GET(req: NextRequest) {
         }
 
         const userData = await userRes.json();
+        console.log(userData);
         const user = userData?.user;
 
         if (!user || !user.email || !user.id) return Response.redirect(new URL(`/login/error?e=user`, req.url));
