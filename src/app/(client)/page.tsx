@@ -2,12 +2,10 @@ import Appbar from "@/components/appbar";
 import ProjectSwitcher from "@/components/project-switcher";
 import TimeSpent from "@/components/time-spent";
 import { Separator } from "@/components/ui/separator";
-import { User } from "@/types/user";
 import { cookies } from "next/headers";
 import ActivityConfig from "@/components/activity-config";
 import CameraPreview from "@/components/camera-preview";
 import TrackingControls from "@/components/tracking-controls";
-import { Project } from "@/types/project";
 import { redirect } from "next/navigation";
 
 export default async function App() {

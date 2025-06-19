@@ -7,7 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { useActivityStore } from "@/store/activity.store";
 
 export default function ActivityConfig() {
-    const { setActivityDetails, setRecordingEnabled } = useActivityStore();
+    const { setActivityDetails, recordingEnabled, setRecordingEnabled } = useActivityStore();
 
     return (
         <div className="w-full border border-dashed rounded-lg flex flex-col gap-4 p-4">
@@ -32,7 +32,7 @@ export default function ActivityConfig() {
 
             <div className="flex items-center gap-2">
                 <Switch
-                    defaultChecked={false}
+                    checked={recordingEnabled}
                     onCheckedChange={(checked) => setRecordingEnabled(checked === true)}
                 />
                 <Label>
