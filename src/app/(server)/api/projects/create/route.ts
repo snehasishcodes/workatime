@@ -36,9 +36,9 @@ export async function POST(req: Request) {
         name,
         created: new Date().toISOString(),
         icon: null,
+        activity_images: [],
         minutes_spent: 0,
-        pings: 0,
-        last_ping: new Date().toISOString()
+        pings: [],
     }
 
     await db

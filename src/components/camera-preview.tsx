@@ -6,9 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, } from "@/components/ui/dialog";
 import { useActivityStore } from "@/store/activity.store";
 import { toast } from "sonner";
+import analyzeActivity from "@/lib/analyze-activity";
+import { useProjectStore } from "@/store/project.store";
 
-export default function CameraPreview() {
-    const { isTracking, recordingEnabled } = useActivityStore();
+export default function CameraPreview({ token }: { token: string }) {
+    const { project } = useProjectStore();
+    const { isTracking, activityDetails, recordingEnabled } = useActivityStore();
     const videoRef = useRef<HTMLVideoElement>(null);
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const recordedChunksRef = useRef<Blob[]>([]);
@@ -68,9 +71,15 @@ export default function CameraPreview() {
             if (ctx) {
                 ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
                 const screenshotData = canvas.toDataURL("image/png");
-                // 
+
+                analyzeActivity(
+                    project,
+                    screenshotData,
+                    activityDetails,
+                    token
+                );
             }
-        }, 10000); // every 10s
+        }, 15000); // every 15s
 
         return () => clearInterval(interval);
     }, [isTracking, permission]);

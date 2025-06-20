@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, jsonb, integer } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, integer, jsonb } from "drizzle-orm/pg-core";
 
 export const usersTable = pgTable("users", {
     id: text("id").primaryKey(),
@@ -15,8 +15,9 @@ export const projectsTable = pgTable("projects", {
     user_id: text("user_id").notNull().references(() => usersTable.id),
     name: varchar({ length: 255 }),
     icon: text("icon"),
-    minutes_spent: integer("minutes_spent"),
-    pings: integer("pings"),
-    last_ping: text("last_ping").default(sql`CURRENT_TIMESTAMP`).notNull(),
     created: text("created").default(sql`CURRENT_TIMESTAMP`).notNull(),
+
+    activity_images: jsonb("activity_images").default([]),
+    minutes_spent: integer("minutes_spent").notNull().default(0),
+    pings: jsonb("pings").default([]),
 });

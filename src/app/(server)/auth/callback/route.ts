@@ -1,7 +1,7 @@
 import { type NextRequest } from "next/server"
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
-import { usersTable } from "@/db/schema";
+import { projectsTable, usersTable } from "@/db/schema";
 import { db } from "@/db";
 import { eq } from "drizzle-orm";
 
@@ -94,6 +94,26 @@ export async function GET(req: NextRequest) {
                 .values(newDbUser)
                 .then(() => console.log("New User Created."))
                 .catch((error) => console.error(error));
+
+            const projectID = `${user.id}-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+
+            const newProject: typeof projectsTable.$inferInsert = {
+                id: projectID,
+                user_id: user.id,
+                name: `${name ?? "User"}'s Project`,
+                created: new Date().toISOString(),
+                icon: null,
+                activity_images: [],
+                minutes_spent: 0,
+                pings: [],
+            }
+
+            await db
+                .insert(projectsTable)
+                .values(newProject)
+                .then(() => console.log("New Project Created by ", user.email))
+                .catch((e) => console.error(e));
+
         } else {
             await db
                 .update(usersTable)

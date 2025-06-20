@@ -3,10 +3,10 @@ CREATE TABLE "projects" (
 	"user_id" text NOT NULL,
 	"name" varchar(255),
 	"icon" text,
-	"minutes_spent" integer,
-	"pings" integer,
-	"last_ping" text DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	"created" text DEFAULT CURRENT_TIMESTAMP NOT NULL
+	"created" text DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"activity_images" jsonb DEFAULT '[]'::jsonb,
+	"minutes_spent" integer DEFAULT 0 NOT NULL,
+	"pings" jsonb DEFAULT '[]'::jsonb
 );
 --> statement-breakpoint
 CREATE TABLE "users" (

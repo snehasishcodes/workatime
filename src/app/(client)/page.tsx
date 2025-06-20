@@ -63,7 +63,9 @@ export default async function App() {
 				</div>
 
 				<div id="config" className="h-full w-full flex flex-col justify-center gap-4 p-4">
-					<CameraPreview />
+					<CameraPreview
+						token={token}
+					/>
 
 					<TrackingControls />
 				</div>

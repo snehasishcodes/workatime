@@ -1,5 +1,5 @@
 {
-  "id": "cf248518-2303-4a63-b802-2981f5754a56",
+  "id": "38d9a531-6703-44d5-9248-9d0525b53d2d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -32,31 +32,33 @@
           "primaryKey": false,
           "notNull": false
         },
-        "minutes_spent": {
-          "name": "minutes_spent",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "pings": {
-          "name": "pings",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "last_ping": {
-          "name": "last_ping",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
-        },
         "created": {
           "name": "created",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
           "default": "CURRENT_TIMESTAMP"
+        },
+        "activity_images": {
+          "name": "activity_images",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'[]'::jsonb"
+        },
+        "minutes_spent": {
+          "name": "minutes_spent",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "pings": {
+          "name": "pings",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'[]'::jsonb"
         }
       },
       "indexes": {},
