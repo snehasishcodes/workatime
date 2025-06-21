@@ -2,7 +2,7 @@ import { headers } from "next/headers";
 import jwt from "jsonwebtoken";
 import { db } from "@/db";
 import { projectsTable, usersTable } from "@/db/schema";
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { generateObject } from "ai";
 import { google } from "@ai-sdk/google";
 import { z } from "zod";
@@ -25,10 +25,15 @@ export async function POST(req: Request) {
                 .where(eq(usersTable.email, email))
                 .limit(1)
         )[0];
-
         if (!user) return Response.json({ success: false }, { status: 404 });
 
         const { project_id, activity, image_url } = await req.json();
+
+        // console.log(project_id, activity, image_url);
+
+        if (!project_id) return Response.json({ success: false }, { status: 400 });
+        if (!image_url) return Response.json({ success: false }, { status: 400 });
+        if (!activity) return Response.json({ success: false }, { status: 400 });
 
         const project = (
             await db
@@ -39,6 +44,7 @@ export async function POST(req: Request) {
         )[0];
 
         if (!project || !project.id) return Response.json({ success: false }, { status: 404 });
+        console.log(5);
         if (project.user_id !== user.id) return Response.json({ success: false }, { status: 401 });
 
         const model = google("gemini-2.0-flash");
@@ -74,7 +80,8 @@ export async function POST(req: Request) {
                         },
                         {
                             type: "image",
-                            image: `${image_url}`
+                            image: image_url,
+                            // mimeType: "image/png"
                         }
                     ]
                 }
@@ -101,12 +108,7 @@ export async function POST(req: Request) {
                         ...(project.pings as any[])
                     ]
                 })
-                .where(
-                    and(
-                        eq(projectsTable.id, project.id),
-                        eq(usersTable.id, user.id)
-                    )
-                );
+                .where(eq(projectsTable.id, project.id));
 
             return Response.json({ success: true, activity_ongoing, activity_ongoing_probability });
         } else {
@@ -125,12 +127,7 @@ export async function POST(req: Request) {
                         ...(project.pings as any[])
                     ]
                 })
-                .where(
-                    and(
-                        eq(projectsTable.id, project.id),
-                        eq(usersTable.id, user.id)
-                    )
-                );
+                .where(eq(projectsTable.id, project.id));
 
             return Response.json({
                 success: true,
@@ -140,6 +137,7 @@ export async function POST(req: Request) {
         }
     }
     catch (err) {
+        console.log(err)
         return Response.json({}, { status: 500 });
     }
 }

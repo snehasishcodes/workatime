@@ -69,7 +69,7 @@ export default function ProjectSwitcher({ projects, token }: { projects: Project
                 <DropdownMenuLabel>Projects</DropdownMenuLabel>
 
                 {projects.map((p) => (
-                    <DropdownMenuItem key={p.id}>
+                    <DropdownMenuItem key={p.id} onClick={() => setProject(p.id)}>
                         <div className="flex items-center gap-2">
                             <Avatar className="rounded-md h-8 w-8">
                                 <AvatarFallback className="rounded-sm bg-primary/10 text-foreground">

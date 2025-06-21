@@ -7,7 +7,7 @@ export default async function analyzeActivity(projectID: string, imageDataURL: s
         },
         body: JSON.stringify({
             project_id: projectID,
-            image: imageDataURL,
+            image_url: imageDataURL,
             activity: activityDetails
         })
     })

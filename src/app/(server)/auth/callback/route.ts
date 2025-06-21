@@ -125,7 +125,7 @@ export async function GET(req: NextRequest) {
                 .catch((error) => console.error(error));
         }
 
-        return Response.redirect(new URL("/", req.url));
+        return Response.redirect(new URL("/refresh", req.url));
     }
     catch (error) {
         console.error(error);
