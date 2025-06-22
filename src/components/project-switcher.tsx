@@ -19,8 +19,11 @@ export default function ProjectSwitcher({ projects, token }: { projects: Project
     const [newProjectCreating, setNewProjectCreating] = useState<boolean>(false);
 
     useEffect(() => {
-        if (!project) setSelectedProject(projects[0]);
-        const currentProject = projects.find((p) => p.id === project);
+        if (!project) {
+            setProject(projects[0]?.id);
+            setSelectedProject(projects[0]);
+        }
+        const currentProject = projects.find((p) => p.id === project) ?? projects[0];
         if (currentProject) setSelectedProject(currentProject);
     }, [projects, project]);
 
