@@ -55,7 +55,7 @@ export default async function App() {
 						/>
 					</div>
 
-					<TimeSpent />
+					<TimeSpent token={token} />
 
 					<Separator className="my-5" />
 
