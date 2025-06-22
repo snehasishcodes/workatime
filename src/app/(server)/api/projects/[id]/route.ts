@@ -41,12 +41,13 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
 
         for (let x = 0; x < (project.pings as any[] ?? []).length; x++) {
             const pn = (project.pings as any[] ?? [])[x];
-            if (!pn || !pn.at) return;
+            if (!pn || !pn.at) continue;
+
             const date = new Date(pn.at as string);
             const dateStr = `${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDate()}`;
             const dateToday = `${new Date().getUTCFullYear()}-${new Date().getUTCMonth()}-${new Date().getUTCDate()}`;
-            if (!date) return;
-            if (dateStr !== dateToday) return;
+            
+            if (dateStr !== dateToday) continue;
             if (pn?.activity_ongoing === true) minutes_today += 0.25;
         }
 
