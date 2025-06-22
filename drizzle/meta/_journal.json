@@ -8,6 +8,13 @@
       "when": 1750410528557,
       "tag": "0000_white_absorbing_man",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1750574144384,
+      "tag": "0001_strange_hairball",
+      "breakpoints": true
     }
   ]
 }

@@ -37,7 +37,7 @@ export async function POST(req: Request) {
         created: new Date().toISOString(),
         icon: null,
         activity_images: [],
-        minutes_spent: 0,
+        minutes_spent: "0.00",
         pings: [],
     }
 

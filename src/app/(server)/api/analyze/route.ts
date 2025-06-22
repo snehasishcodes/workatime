@@ -96,7 +96,7 @@ export async function POST(req: Request) {
             await db
                 .update(projectsTable)
                 .set({
-                    minutes_spent: Number(((project.minutes_spent ?? 0) + 0.25).toFixed(2)),
+                    minutes_spent: `${Number(((Number(project.minutes_spent ?? 0)) + 0.25).toFixed(2))}`,
                     pings: [
                         {
                             activity_ongoing,

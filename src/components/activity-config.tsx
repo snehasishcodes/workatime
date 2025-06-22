@@ -7,7 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { useActivityStore } from "@/store/activity.store";
 
 export default function ActivityConfig() {
-    const { setActivityDetails, recordingEnabled, setRecordingEnabled } = useActivityStore();
+    const { activityDetails, setActivityDetails, recordingEnabled, setRecordingEnabled } = useActivityStore();
 
     return (
         <div className="w-full border border-dashed rounded-lg flex flex-col gap-4 p-4">
@@ -23,6 +23,7 @@ export default function ActivityConfig() {
                 <Input
                     type="text"
                     name="activity-details"
+                    defaultValue={activityDetails}
                     placeholder="Building a tower with playing cards"
                     maxLength={150}
                     required
