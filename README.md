@@ -117,9 +117,18 @@ pnpm run start
 
 ## 🌟 Deploying to Production
 
-Deploy to [Vercel](https://vercel.com) - it's easy AF. Actual deploying guide will be coming soon.
+- Deploy to [Vercel](https://vercel.com) - it's easy AF.
+	- Reminder: Do not forget to setup Environment Variables before deploying 😂
 
-- Reminder: Do not forget to setup Environment Variables before deploying 😂
+- Deploying somewhere else
+	- Add build and start commands
+	```bash
+	pnpm install
+	pnpm run build
+	pnpm run start
+	```
+	- Add environment variables, see [#environment-variables](#️⃣-environment-variables)
+	- Deploy ^_^
 
 ## 👏🏻 Acknowledgement
 GitHub README inspired from [tRPC README](https://github.com/tRPC/tRPC)

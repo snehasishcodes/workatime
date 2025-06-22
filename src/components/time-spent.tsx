@@ -1,6 +1,42 @@
-import { CalendarClockIcon, ClockIcon, HistoryIcon } from "lucide-react";
+"use client";
 
-export default function TimeSpent() {
+import { useState, useEffect } from "react";
+import { CalendarClockIcon, ClockIcon, HistoryIcon } from "lucide-react";
+import { getProject } from "@/lib/project";
+import { useProjectStore } from "@/store/project.store";
+import { useActivityStore } from "@/store/activity.store";
+
+export default function TimeSpent({ token }: { token: string }) {
+    const { project } = useProjectStore();
+    const { isTracking } = useActivityStore();
+    const [minutesToday, setMinutesToday] = useState<number>(0.00);
+    const [minutesTotal, setMinutesTotal] = useState<number>(0.00);
+
+    useEffect(() => {
+        setInterval(async () => {
+            const data = await getProject(project, token);
+            if (!data || !data.id) return;
+            setMinutesToday(Number(data.minutes_today ?? 0));
+            setMinutesTotal(Number(data.minutes_spent ?? 0));
+        }, 61000);
+    }, []);
+
+    useEffect(() => {
+        (async () => {
+            const data = await getProject(project, token);
+            if (!data || !data.id) return;
+            setMinutesToday(Number(data.minutes_today ?? 0));
+            setMinutesTotal(Number(data.minutes_spent ?? 0));
+        })();
+    }, [isTracking, project]);
+
+    const formatMinutes = (m: number) => {
+        const hours = Math.floor(m / 60);
+        const minutes = m % 60;
+
+        return { hours, minutes }
+    }
+
     return (
         <div className="w-full border border-dashed rounded-lg flex flex-col gap-4 p-4">
             <h2 className="font-semibold flex gap-2 items-center">
@@ -22,16 +58,16 @@ export default function TimeSpent() {
 
                     <h1 className="text-4xl font-semibold text-transparent bg-clip-text bg-gradient-to-b from-primary to-primary/40">
                         <span>
-                            0h
+                            {formatMinutes(minutesToday).hours}h
                         </span>
                         {" "}
                         <span>
-                            0m
+                            {formatMinutes(minutesToday).hours}m
                         </span>
                         {" "}
-                        <span className="text-sm font-medium text-muted-foreground">
+                        {/* <span className="text-sm font-medium text-muted-foreground">
                             0s
-                        </span>
+                        </span> */}
                     </h1>
                 </div>
 
@@ -47,16 +83,16 @@ export default function TimeSpent() {
 
                     <h1 className="text-4xl font-semibold text-transparent bg-clip-text bg-gradient-to-b from-primary to-primary/40">
                         <span>
-                            0h
+                            {formatMinutes(minutesTotal).hours}h
                         </span>
                         {" "}
                         <span>
-                            0m
+                            {formatMinutes(minutesTotal).minutes}m
                         </span>
                         {" "}
-                        <span className="text-sm font-medium text-muted-foreground">
+                        {/* <span className="text-sm font-medium text-muted-foreground">
                             0s
-                        </span>
+                        </span> */}
                     </h1>
                 </div>
             </div>
