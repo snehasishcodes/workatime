@@ -9,7 +9,7 @@ export async function getProject(id: string, token: string) {
         }
     }).then((r) => r.json());
 
-    // console.log(data);
+    console.log(data);
     if (!data || !data.project) return null;
 
     return data.project;

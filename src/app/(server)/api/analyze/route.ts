@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm";
 import { generateObject } from "ai";
 import { google } from "@ai-sdk/google";
 import { z } from "zod";
+import { ProjectSession } from "@/types/project";
 
 export async function POST(req: Request) {
     const headersList = await headers();
@@ -93,41 +94,74 @@ export async function POST(req: Request) {
         const { activity_ongoing, activity_ongoing_probability } = object;
 
         if (activity_ongoing === true) {
-            await db
+            const sessionExists = (project.sessions as ProjectSession[] ?? []).findIndex((s) => s.activity?.toLowerCase() === activity.toLowerCase());
+
+            if (sessionExists === -1) await db
                 .update(projectsTable)
                 .set({
                     minutes_spent: `${Number(((Number(project.minutes_spent ?? 0)) + 0.25).toFixed(2))}`,
+                    sessions: [
+                        {
+                            activity,
+                            minutes_spent: "0.25",
+                            started: new Date().toISOString(),
+                            pings: [
+                                {
+                                    activity_ongoing,
+                                    activity_ongoing_probability,
+                                    activity_image: ``,
+                                    usage,
+                                    at: new Date().toISOString()
+                                }
+                            ]
+                        },
+                        ...(project.sessions as ProjectSession[] ?? [])
+                    ]
+                })
+                .where(eq(projectsTable.id, project.id));
+            else {
+                const allSessions = project.sessions as ProjectSession[] ?? [];
+                allSessions[sessionExists] = {
+                    ...allSessions[sessionExists],
                     pings: [
                         {
                             activity_ongoing,
                             activity_ongoing_probability,
                             activity_image: ``,
-                            at: new Date().toISOString(),
                             usage,
+                            at: new Date().toISOString()
                         },
-                        ...(project.pings as any[])
+                        ...(allSessions[sessionExists].pings ?? [])
                     ]
-                })
-                .where(eq(projectsTable.id, project.id));
+                };
+
+                await db
+                    .update(projectsTable)
+                    .set({
+                        minutes_spent: `${Number(((Number(project.minutes_spent ?? 0)) + 0.25).toFixed(2))}`,
+                        sessions: allSessions,
+                    })
+                    .where(eq(projectsTable.id, project.id));
+            }
 
             return Response.json({ success: true, activity_ongoing, activity_ongoing_probability });
         } else {
-            await db
-                .update(projectsTable)
-                .set({
-                    // no incrementing minutes_spent 
-                    pings: [
-                        {
-                            activity_ongoing,
-                            activity_ongoing_probability,
-                            activity_image: ``,
-                            at: new Date().toISOString(),
-                            usage,
-                        },
-                        ...(project.pings as any[])
-                    ]
-                })
-                .where(eq(projectsTable.id, project.id));
+            // await db
+            //     .update(projectsTable)
+            //     .set({
+            //         // no incrementing minutes_spent 
+            //         sessions: [
+            //             {
+            //                 activity_ongoing,
+            //                 activity_ongoing_probability,
+            //                 activity_image: ``,
+            //                 at: new Date().toISOString(),
+            //                 usage,
+            //             },
+            //             ...(project.sessions as any[])
+            //         ]
+            //     })
+            //     .where(eq(projectsTable.id, project.id));
 
             return Response.json({
                 success: true,

@@ -31,30 +31,16 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
             await db
                 .select()
                 .from(projectsTable)
-                .where(eq(projectsTable.user_id, user.id))
+                .where(eq(projectsTable.user_id, user.id));
 
         const project = projects.find((p) => p.id === id);
 
         if (!project) return Response.json({ project: null }, { status: 404 });
 
-        let minutes_today = 0;
-
-        for (let x = 0; x < (project.pings as any[] ?? []).length; x++) {
-            const pn = (project.pings as any[] ?? [])[x];
-            if (!pn || !pn.at) continue;
-
-            const date = new Date(pn.at as string);
-            const dateStr = `${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDate()}`;
-            const dateToday = `${new Date().getUTCFullYear()}-${new Date().getUTCMonth()}-${new Date().getUTCDate()}`;
-            
-            if (dateStr !== dateToday) continue;
-            if (pn?.activity_ongoing === true) minutes_today += 0.25;
-        }
-
         return Response.json({
             project: {
                 ...project,
-                minutes_today
+                minutes_spent: Math.round(Number(project.minutes_spent ?? 0))
             }
         }, { status: 200 });
     }

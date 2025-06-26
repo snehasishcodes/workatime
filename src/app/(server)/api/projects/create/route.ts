@@ -38,7 +38,7 @@ export async function POST(req: Request) {
         icon: null,
         activity_images: [],
         minutes_spent: "0.00",
-        pings: [],
+        sessions: [],
     }
 
     await db

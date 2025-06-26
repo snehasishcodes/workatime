@@ -17,7 +17,7 @@ export const projectsTable = pgTable("projects", {
     icon: text("icon"),
     created: text("created").default(sql`CURRENT_TIMESTAMP`).notNull(),
 
-    activity_images: jsonb("activity_images").default([]),
     minutes_spent: numeric("minutes_spent", { precision: 10, scale: 2 }).notNull().default("0.00"),
-    pings: jsonb("pings").default([]),
+    activity_images: jsonb("activity_images").default([]),
+    sessions: jsonb("sessions").default([]),
 });

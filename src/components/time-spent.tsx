@@ -9,14 +9,12 @@ import { useActivityStore } from "@/store/activity.store";
 export default function TimeSpent({ token }: { token: string }) {
     const { project } = useProjectStore();
     const { isTracking } = useActivityStore();
-    const [minutesToday, setMinutesToday] = useState<number>(0.00);
-    const [minutesTotal, setMinutesTotal] = useState<number>(0.00);
+    const [minutesTotal, setMinutesTotal] = useState<number>(0);
 
     useEffect(() => {
         setInterval(async () => {
             const data = await getProject(project, token);
             if (!data || !data.id) return;
-            setMinutesToday(Number(data.minutes_today ?? 0));
             setMinutesTotal(Number(data.minutes_spent ?? 0));
         }, 61000);
     }, []);
@@ -25,7 +23,6 @@ export default function TimeSpent({ token }: { token: string }) {
         (async () => {
             const data = await getProject(project, token);
             if (!data || !data.id) return;
-            setMinutesToday(Number(data.minutes_today ?? 0));
             setMinutesTotal(Number(data.minutes_spent ?? 0));
         })();
     }, [isTracking, project]);
@@ -58,11 +55,11 @@ export default function TimeSpent({ token }: { token: string }) {
 
                     <h1 className="text-4xl font-semibold text-transparent bg-clip-text bg-gradient-to-b from-primary to-primary/40">
                         <span>
-                            {formatMinutes(minutesToday).hours}h
+                            00h
                         </span>
                         {" "}
                         <span>
-                            {formatMinutes(minutesToday).hours}m
+                            00m
                         </span>
                         {" "}
                         {/* <span className="text-sm font-medium text-muted-foreground">

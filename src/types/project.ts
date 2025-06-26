@@ -3,8 +3,22 @@ export type Project = {
     user_id: string
     name: string
     icon: string
-    minutes_spent: number
-    pings: number
-    last_ping: string
     created: string
+
+    activity_images: string[]
+    minutes_spent: number
+    sessions: ProjectSession[]
+}
+
+export type ProjectSession = {
+    activity: string
+    minutes_spent: number
+    started: string
+    pings: {
+        activity_ongoing: boolean
+        activity_ongoing_probability: number
+        activity_image: string,
+        at: string
+        usage: any
+    }[]
 }
